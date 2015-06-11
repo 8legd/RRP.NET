@@ -10,10 +10,15 @@ Namespace RRP.NET20
 
         Private batch As New ArrayList
 
-        Public Sub New(ByVal url As System.Uri, _
-                       ByVal timeout As Integer, _
-                       ByVal textEncoding As System.Text.Encoding)
-            Me.url = url
+        Public Sub New(ByVal timeout As Integer, _
+                       ByVal textEncoding As System.Text.Encoding, _
+                       Optional ByVal rrp As String = "http://127.0.0.1:8000")
+            Dim url As String = rrp
+            If url.EndsWith("/") Then
+                url = url.Substring(0, url.Length - 1)
+            End If
+            url = url & "/batch/multipartmixed"
+            Me.url = New System.Uri(url)
             Me.timeout = timeout
             Me.textEncoding = textEncoding
         End Sub
