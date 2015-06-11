@@ -6,9 +6,9 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>https://github.com/8legd/RRP.NET/license.md</licenseUrl>
+    <licenseUrl>https://github.com/8legd/RRP.NET/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/8legd/RRP.NET</projectUrl>
-    <iconUrl>https://github.com/8legd/RRP.NET/icon.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/8legd/RRP.NET/master/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>initial release</releaseNotes>
