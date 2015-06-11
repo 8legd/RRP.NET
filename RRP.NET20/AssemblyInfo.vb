@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("RRP.NET20")> 
 <Assembly: AssemblyDescription("RRP Client for .NET 2.0")> 
-<Assembly: AssemblyCompany("}}8{{ //8le.gd")> 
+<Assembly: AssemblyCompany("}}8{{ //8legd")> 
 <Assembly: AssemblyProduct("RRP.NET20")> 
-<Assembly: AssemblyCopyright("Copyright ©  2015")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyCopyright("Copyright © 2015 }}8{{ //8legd")> 
+<Assembly: AssemblyTrademark("}}8{{ //8legd")> 
 
 <Assembly: ComVisible(False)>
 

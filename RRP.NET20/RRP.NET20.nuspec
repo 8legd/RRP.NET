@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/8legd/RRP.NET/license.md</licenseUrl>
+    <projectUrl>https://github.com/8legd/RRP.NET</projectUrl>
+    <iconUrl>https://github.com/8legd/RRP.NET/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>initial release</releaseNotes>
+    <copyright>Copyright © 2015 }}8{{ //8legd</copyright>
+  </metadata>
+</package>
