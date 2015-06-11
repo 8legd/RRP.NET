@@ -6,12 +6,13 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>https://github.com/8legd/RRP.NET/LICENSE.md</licenseUrl>
+    <licenseUrl>https://raw.githubusercontent.com/8legd/RRP.NET/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/8legd/RRP.NET</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/8legd/RRP.NET/master/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>initial release</releaseNotes>
-    <copyright>Copyright © 2015 }}8{{ //8legd</copyright>
+    <copyright>Copyright 2015 }}8{{ //8legd</copyright>
+    <tags>Web Services RRP Rapid Response Proxy</tags>
   </metadata>
 </package>
