@@ -28,21 +28,26 @@ Public Class Batch
         Public RequestMethod As String
         Public RequestContentType As String
         Public RequestBodyText As String
+        Public RequestAdditionalHeaders As System.Collections.Specialized.NameValueCollection
+
 
         Public ResponseStatusOK As Boolean
         Public ResponseStatusLine As String
         Public ResponseHeaders As System.Net.WebHeaderCollection
         Public ResponseBodyText As String
 
+
         Sub New(ByVal requestUrl As System.Uri, _
                 ByVal requestMethod As String, _
                 ByVal requestContentType As String, _
-                ByVal requestBodyText As String)
+                ByVal requestBodyText As String, _
+                Optional ByVal requestAdditionalHeaders As System.Collections.Specialized.NameValueCollection = Nothing)
 
             Me.RequestUrl = requestUrl
             Me.RequestMethod = requestMethod
             Me.RequestContentType = requestContentType
             Me.RequestBodyText = requestBodyText
+            Me.RequestAdditionalHeaders = requestAdditionalHeaders
 
         End Sub
 
@@ -94,6 +99,11 @@ Public Class Batch
             result = result & "POST " & Me.RequestUrl.PathAndQuery & " HTTP/1.1" & vbCrLf
             result = result & "Host: " & Me.RequestUrl.Host & vbCrLf
             result = result & "Content-Type: " & Me.RequestContentType & vbCrLf
+            If Not Me.RequestAdditionalHeaders Is Nothing Then
+                For Each key In Me.RequestAdditionalHeaders.AllKeys
+                    result = result & key & ": " & Me.RequestAdditionalHeaders(key) & vbCrLf
+                Next key
+            End If
             result = result & "Content-Length: " & textEncoding.GetBytes(Me.RequestBodyText).Length.ToString() & vbCrLf
             result = result & "Forwarded: proto=" & Me.RequestUrl.Scheme & vbCrLf
             result = result & vbCrLf & Me.RequestBodyText & vbCrLf & vbCrLf
@@ -106,8 +116,15 @@ Public Class Batch
     Public Function AddRequest(ByVal requestUrl As System.Uri, _
                                 ByVal requestMethod As String, _
                                 ByVal requestContentType As String, _
-                                ByVal requestBodyText As String) As Integer
-        Me.batch.Add(New requestResponse(requestUrl, requestMethod, requestContentType, requestBodyText))
+                                ByVal requestBodyText As String, _
+                                Optional ByVal requestAdditionalHeaders As System.Collections.Specialized.NameValueCollection = Nothing) As Integer
+        Dim rr As requestResponse
+        If requestAdditionalHeaders Is Nothing Then
+            rr = New requestResponse(requestUrl, requestMethod, requestContentType, requestBodyText, New System.Collections.Specialized.NameValueCollection())
+        Else
+            rr = New requestResponse(requestUrl, requestMethod, requestContentType, requestBodyText, requestAdditionalHeaders)
+        End If
+        Me.batch.Add(rr)
         Return Me.batch.Count - 1
     End Function
 
@@ -193,6 +210,7 @@ Public Class Batch
         req.Method = reqres.RequestMethod
         req.Timeout = Me.timeout * 1000 'RRP timeout is specified in seconds
         req.ContentType = reqres.RequestContentType
+
 
         Dim reqStream As New System.IO.StreamWriter(req.GetRequestStream(), Me.textEncoding)
         reqStream.Write(reqres.RequestBodyText)
