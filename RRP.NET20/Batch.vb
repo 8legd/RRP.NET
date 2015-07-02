@@ -118,13 +118,7 @@ Public Class Batch
                                 ByVal requestContentType As String, _
                                 ByVal requestBodyText As String, _
                                 Optional ByVal requestAdditionalHeaders As System.Collections.Specialized.NameValueCollection = Nothing) As Integer
-        Dim rr As requestResponse
-        If requestAdditionalHeaders Is Nothing Then
-            rr = New requestResponse(requestUrl, requestMethod, requestContentType, requestBodyText, New System.Collections.Specialized.NameValueCollection())
-        Else
-            rr = New requestResponse(requestUrl, requestMethod, requestContentType, requestBodyText, requestAdditionalHeaders)
-        End If
-        Me.batch.Add(rr)
+        Me.batch.Add(New requestResponse(requestUrl, requestMethod, requestContentType, requestBodyText, requestAdditionalHeaders))
         Return Me.batch.Count - 1
     End Function
 
