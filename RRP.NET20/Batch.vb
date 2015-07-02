@@ -222,7 +222,6 @@ Public Class Batch
         reqres.ResponseBodyText = reader.ReadToEnd()
 
         reader.Close()
-        resStream.Close()
         res.Close()
 
     End Sub
