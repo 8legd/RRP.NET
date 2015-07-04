@@ -3,12 +3,14 @@
 Public Class Batch
 
     Private url As System.Uri
-    Private timeout As Integer
+    Private clientTimeout As Integer
+    Private requestTimeout As Integer
     Private textEncoding As System.Text.Encoding
 
     Private batch As New ArrayList
 
-    Public Sub New(ByVal timeout As Integer, _
+    Public Sub New(ByVal clientTimeout As Integer, _
+                   ByVal requestTimeout As Integer, _
                    ByVal textEncoding As System.Text.Encoding, _
                    Optional ByVal rrp As String = "http://127.0.0.1:8000")
         Dim url As String = rrp
@@ -17,7 +19,8 @@ Public Class Batch
         End If
         url = url & "/batch/multipartmixed"
         Me.url = New System.Uri(url)
-        Me.timeout = timeout
+        Me.clientTimeout = clientTimeout
+        Me.requestTimeout = requestTimeout
         Me.textEncoding = textEncoding
     End Sub
 
@@ -140,9 +143,11 @@ Public Class Batch
         Next
         batchRequestContent = batchRequestContent & "--" & vbCrLf
 
-        batchRequestResponse = New requestResponse(Me.url, "POST", "multipart/mixed; boundary=" & multipartBoundary, batchRequestContent)
+        Dim additionalHeaders As New System.Collections.Specialized.NameValueCollection
+        additionalHeaders.Add("x-rrp-timeout", Me.requestTimeout)
+        batchRequestResponse = New requestResponse(Me.url, "POST", "multipart/mixed; boundary=" & multipartBoundary, batchRequestContent, additionalHeaders)
 
-        Me.transport(batchRequestResponse)
+        Me.transport(Me.clientTimeout, batchRequestResponse)
 
         'Collect the individual responses
         Dim rawResponses As New ArrayList
@@ -180,7 +185,7 @@ Public Class Batch
     'Useful for benchmarking
     Public Sub ProcessWithoutRRP()
         For Each rr As requestResponse In batch
-            Me.transport(rr)
+            Me.transport(Me.requestTimeout, rr)
         Next
     End Sub
 
@@ -198,13 +203,19 @@ Public Class Batch
     End Sub
 
 
-    Private Sub transport(ByRef reqres As requestResponse)
+    Private Sub transport(ByVal timeout As Integer, _
+                          ByRef reqres As requestResponse)
 
         Dim req As System.Net.HttpWebRequest = DirectCast(System.Net.WebRequest.CreateDefault(reqres.RequestUrl), System.Net.HttpWebRequest)
         req.Method = reqres.RequestMethod
-        req.Timeout = Me.timeout * 1000 'RRP timeout is specified in seconds
+        req.Timeout = timeout * 1000 'timeout is specified in seconds
         req.ContentType = reqres.RequestContentType
 
+        If Not reqres.RequestAdditionalHeaders Is Nothing Then
+            For Each key In reqres.RequestAdditionalHeaders.AllKeys
+                req.Headers.Add(key, reqres.RequestAdditionalHeaders(key))
+            Next key
+        End If
 
         Dim reqStream As New System.IO.StreamWriter(req.GetRequestStream(), Me.textEncoding)
         reqStream.Write(reqres.RequestBodyText)
